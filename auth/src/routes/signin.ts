@@ -22,7 +22,7 @@ router.post(
     if (!user || !(await user.correctPassword(password))) {
       throw new BadRequestError('Incorrect email or password')
     }
-    res.send({
+    res.status(200).send({
       data: user,
     })
   }

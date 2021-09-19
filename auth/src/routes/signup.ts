@@ -1,4 +1,6 @@
 import { Request, Response, Router } from 'express'
+import { sign, verify } from 'jsonwebtoken'
+
 import { prefix } from '../../consts'
 import { BadRequestError } from '../errors/bad-request-error'
 import { validateBody } from '../middlewares/validate-body'
@@ -21,6 +23,19 @@ router.post(
 
     const user = User.build({ email, password })
     await user.save()
+
+    const token = sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_KEY!
+    )
+
+    req.session = {
+      jwt: token,
+    }
+
     res.status(201).send({
       data: user,
     })

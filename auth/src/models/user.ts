@@ -27,6 +27,15 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Password field is required'],
   },
+}, {
+  toJSON: {
+    versionKey: false,
+    transform(doc, ret) {
+      ret.id = ret._id
+      delete ret._id
+      delete ret.password
+    }
+  }
 })
 
 userSchema.pre('save', async function (next) {
