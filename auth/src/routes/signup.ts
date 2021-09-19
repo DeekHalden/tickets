@@ -3,16 +3,16 @@ import { sign, verify } from 'jsonwebtoken'
 
 import { prefix } from '../../consts'
 import { BadRequestError } from '../errors/bad-request-error'
-import { validateBody } from '../middlewares/validate-body'
+import { validateRequest } from '../middlewares/validate-request'
 import { User } from '../models/user'
-import { requestValidationRules } from './request-validation-rules'
+import { requestValidationMiddleware } from '../middlewares/request-validation-rules'
 
 const router = Router()
 
 router.post(
   `${prefix}/users/signup`,
-  requestValidationRules,
-  validateBody,
+  requestValidationMiddleware,
+  validateRequest,
   async (req: Request, res: Response) => {
     const { email, password } = req.body
 
@@ -37,7 +37,7 @@ router.post(
     }
 
     res.status(201).send({
-      data: user,
+      data: { user },
     })
   }
 )

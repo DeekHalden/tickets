@@ -1,6 +1,6 @@
 import { body } from 'express-validator'
 
-export const requestValidationRules = [
+export const requestValidationMiddleware = [
   body('email').isEmail().withMessage('Email must be valid'),
   body('password')
     .trim()
