@@ -5,14 +5,22 @@ deploy:
     manifests:
       - ./infra/k8s/*
 build:
-  local: 
+  local:
     push: false
-  artifacts: 
+  artifacts:
     - image: deekhalden/auth
       context: auth
       docker:
         dockerfile: Dockerfile
       sync:
-        manual: 
+        manual:
           - src: 'src/**/*.ts'
+            dest: .
+    - image: deekhalden/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
             dest: .
