@@ -9,7 +9,7 @@ const router = Router()
 router.get(
   `${prefix}/users/currentuser`,
   currentUser,
-  requireAuth,
+  // requireAuth,
   getCurrentUser
 )
 

@@ -4,15 +4,59 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next"
+    "dev": "next",
+    "test": "kcd-scripts test --detectOpenHandles"
   },
+  "homepage": "https://tessera.dev",
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "bootstrap": "^5.1.1",
-    "next": "^11.1.2",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.7",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  }
+    "react-dom": "^17.0.2",
+    "react-test-renderer": "^17.0.2",
+    "msw": "^0.35.0",
+    "@testing-library/react": "^12.1.0",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@testing-library/user-event": "^13.2.1"
+  },
+  "dependencies": {
+    "@testing-library/dom": "^8.5.0",
+    "bootstrap": "^5.1.1",
+    "jest": "^27.2.0",
+    "kcd-scripts": "^11.2.2",
+    "next": "^11.1.2",
+    "swr": "^1.0.1",
+    "whatwg-fetch": "^3.6.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "kcd-scripts pre-commit"
+    }
+  },
+  "babel": {
+    "presets": [
+      "kcd-scripts/babel"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/kcd-scripts/eslint.js",
+    "rules": {
+      "import/prefer-default-export": "off",
+      "jsx-a11y/label-has-for": "off",
+      "react/prop-types": "off",
+      "import/no-unassigned-import": "off",
+      "no-console": "off",
+      "jsx-a11y/accessible-emoji": "off",
+      "consistent-return": "off"
+    }
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "coverage",
+    "@types"
+  ]
 }
