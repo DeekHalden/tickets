@@ -1,8 +1,10 @@
 import { Router } from 'express'
 
 import { prefix } from '../../consts'
-import { validateRequest } from '../middlewares/validate-request'
-import { requestValidationMiddleware } from '../middlewares/request-validation-rules'
+import {
+  validateRequest,
+  requestValidationMiddleware,
+} from '@microservices-tessera/common'
 import { signup } from '../controllers/signup'
 
 const router = Router()

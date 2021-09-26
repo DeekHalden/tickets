@@ -1,8 +1,7 @@
 import { Router } from 'express'
 import { prefix } from '../../consts'
 import { signout } from '../controllers/signout'
-import { currentUser } from '../middlewares/current-user'
-import { requireAuth } from '../middlewares/require-auth'
+import { currentUser, requireAuth } from '@microservices-tessera/common'
 
 const router = Router()
 

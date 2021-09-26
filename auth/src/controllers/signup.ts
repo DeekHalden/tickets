@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { sign } from 'jsonwebtoken'
-import { BadRequestError } from '../errors/bad-request-error'
+import { BadRequestError } from '@microservices-tessera/common'
 import { User } from '../models/user'
 
 export const signup = async (req: Request, res: Response) => {

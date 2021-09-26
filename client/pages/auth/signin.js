@@ -1,11 +1,11 @@
 import Router from 'next/router'
 import React, {useState} from 'react'
 import {useRequest} from '../../hooks/use-request'
-const Signup = () => {
+const Signin = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const {errors, doRequest} = useRequest({
-    endpoint: '/users/signup',
+    endpoint: '/users/signin',
     config: {
       method: 'POST',
       data: {email, password},
@@ -18,7 +18,7 @@ const Signup = () => {
   }
   return (
     <form onSubmit={onSubmit}>
-      <h1>Sign up</h1>
+      <h1>Sign in</h1>
       <div className="form-group mb-2">
         <label className="form-label" htmlFor="email">
           Email Address
@@ -47,11 +47,11 @@ const Signup = () => {
       {errors}
       <div className="form-group">
         <button type="submit" className="btn btn-primary">
-          Sign Up
+          Sign In
         </button>
       </div>
     </form>
   )
 }
 
-export default Signup
+export default Signin

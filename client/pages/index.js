@@ -1,19 +1,16 @@
 import {client} from '../api/api'
 
-const LandingPage = props => {
-  console.log('I am in the component')
-  console.log(props)
-  return <h1>LandingPage page! </h1>
+const LandingPage = ({user}) => {
+  return <h1>{user ? 'You are signed in' : 'You are signed out'}</h1>
 }
 
-export async function getServerSideProps({req}) {
-  const {data} = await client(
-    '/api/v1/users/currentuser',
-    {
-      headers: req.headers
-    },
-  )
-  return {props: data ?? {}}
+LandingPage.getInitialProps = async ({ req }) => {
+  const {data} = await client('/users/currentuser', {
+    headers: req?.headers,
+  })
+  return data ?? {}
 }
+
+console.log('👌👌👌👌👌rendered')
 
 export default LandingPage

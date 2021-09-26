@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
 
 export const getCurrentUser = (req: Request, res: Response) => {
-  res.send({ data: { user: req.currentUser } })
+  res.status(200).json({ data: { user: req.currentUser } })
 }

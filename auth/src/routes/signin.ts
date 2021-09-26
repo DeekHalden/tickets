@@ -1,9 +1,10 @@
-import { Request, Response, Router } from 'express'
-import { sign } from 'jsonwebtoken'
+import { Router } from 'express'
+import {
+  validateRequest,
+  requestValidationMiddleware,
+} from '@microservices-tessera/common'
 
 import { prefix } from '../../consts'
-import { validateRequest } from '../middlewares/validate-request'
-import { requestValidationMiddleware } from '../middlewares/request-validation-rules'
 import { signin } from '../controllers/signin'
 
 const router = Router()

@@ -1,14 +1,12 @@
 export async function client(
   endpoint,
   {data, token, method, headers: customHeaders, ...customConfig} = {},
-  headers = '',
 ) {
   const ep = `${
     typeof window === 'undefined'
-      ? 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local'
-      : ''
+      ? 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/v1'
+      : '/api/v1'
   }${endpoint}`
-  console.log(ep)
   const config = {
     method: method || 'GET',
     body: data ? JSON.stringify(data) : undefined,
@@ -20,6 +18,7 @@ export async function client(
     ...customConfig,
   }
   const response = await fetch(ep, config)
+  if (response.ok && response.status === 204) return {}
   const responseData = await response.json()
   if (response.ok) {
     return responseData
