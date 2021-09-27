@@ -3,13 +3,11 @@ import mongoose from 'mongoose'
 import { app } from '../app'
 import request from 'supertest'
 import { prefix } from '../../consts'
+import { sign } from 'jsonwebtoken'
 let mongo: MongoMemoryServer
 
 declare global {
-  var signin: (
-    statusCode?: number,
-    data?: { email?: string; password?: string }
-  ) => Promise<string[]>
+  var signin: () => string[]
   var signup: (
     statusCode?: number,
     data?: { email?: string; password?: string }
@@ -35,26 +33,16 @@ afterAll(async () => {
   await mongoose.connection.close()
 })
 
-global.signup = async (
-  status = 201,
-  data = { email: 'test@test.com', password: 'password' }
-) => {
-  const response = await request(app)
-    .post(`${prefix}/users/signup`)
-    .send(data)
-    .expect(status)
-  const cookie = response.get('Set-Cookie')
-  return cookie
-}
+global.signin = () => {
+  const payload = {
+    id: 'qwe123x',
+    email: 'test@test.com',
+  }
+  const token = sign(payload, process.env.JWT_KEY!)
 
-global.signin = async (
-  status = 200,
-  data = { email: 'test@test.com', password: 'password' }
-) => {
-  const response = await request(app)
-    .post(`${prefix}/users/signin`)
-    .send(data)
-    .expect(status)
-  const cookie = response.get('Set-Cookie')
-  return cookie
+  const session = { jwt: token }
+  const sessionJSON = JSON.stringify(session)
+
+  const base64 = Buffer.from(sessionJSON).toString('base64')
+  return [`express:sess=${base64}`]
 }

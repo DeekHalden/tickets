@@ -2,7 +2,12 @@ import express from 'express'
 import 'express-async-errors'
 
 import cookieSession from 'cookie-session'
-import { errorHandler, NotFoundError } from '@microservices-tessera/common'
+import {
+  currentUser,
+  errorHandler,
+  NotFoundError,
+} from '@microservices-tessera/common'
+import { createTicketRouter } from './routes/__test__/new'
 
 const app = express()
 app.set('trust proxy', true)
@@ -14,6 +19,9 @@ app.use(
     secure: process.env.NODE_ENV !== 'test',
   })
 )
+
+app.use(currentUser)
+app.use(createTicketRouter)
 
 app.all('*', async () => {
   throw new NotFoundError()
