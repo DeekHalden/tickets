@@ -1,8 +1,8 @@
 import { requireAuth, validateRequest } from '@microservices-tessera/common'
 import { Router } from 'express'
 import { body } from 'express-validator'
-import { prefix } from '../../../consts'
-import { handleNew } from '../../controllers/new'
+import { prefix } from '../../consts'
+import { handleNew } from '../controllers/new'
 
 const router = Router()
 

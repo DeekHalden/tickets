@@ -7,7 +7,7 @@ import {
   errorHandler,
   NotFoundError,
 } from '@microservices-tessera/common'
-import { createTicketRouter } from './routes/__test__/new'
+import { createTicketRouter } from './routes/new'
 
 const app = express()
 app.set('trust proxy', true)
