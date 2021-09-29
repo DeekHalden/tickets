@@ -7,7 +7,7 @@ import { sign } from 'jsonwebtoken'
 let mongo: MongoMemoryServer
 
 declare global {
-  var signin: () => string[]
+  var signin: (payload?: { id: string; email: string }) => string[]
   var signup: (
     statusCode?: number,
     data?: { email?: string; password?: string }
@@ -33,11 +33,12 @@ afterAll(async () => {
   await mongoose.connection.close()
 })
 
-global.signin = () => {
-  const payload = {
+global.signin = (
+  payload: { id: string; email: string } = {
     id: 'qwe123x',
     email: 'test@test.com',
   }
+) => {
   const token = sign(payload, process.env.JWT_KEY!)
 
   const session = { jwt: token }

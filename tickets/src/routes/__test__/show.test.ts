@@ -1,9 +1,12 @@
 import request from 'supertest'
+import { Types } from 'mongoose'
+
 import { prefix } from '../../../consts'
 import { app } from '../../app'
 
 it('returns a 404 if the ticket is not found', async () => {
-  await request(app).get(`${prefix}/tickets/qweadqwe`).send().expect(404)
+  const id = new Types.ObjectId().toHexString()
+  await request(app).get(`${prefix}/tickets/${id}`).send().expect(404)
 })
 
 it('returns the ticket if it is found', async () => {
@@ -11,10 +14,17 @@ it('returns the ticket if it is found', async () => {
     title: 'concert',
     price: 20,
   }
-  await request(app)
+  const response = await request(app)
     .post(`${prefix}/tickets`)
     .set('Cookie', signin())
     .send(ticket)
     .expect(201)
-  await request(app).get(`${prefix}/tickets/${ticket.title}`).send().expect(200)
+
+  const ticketResponse = await request(app)
+    .get(`${prefix}/tickets/${response.body.id}`)
+    .send()
+    .expect(200)
+
+  expect(ticketResponse.body.title).toEqual(ticket.title)
+  expect(ticketResponse.body.price).toEqual(ticket.price)
 })

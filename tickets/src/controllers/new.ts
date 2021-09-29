@@ -6,5 +6,5 @@ export const handleNew = async (req: Request, res: Response) => {
   const ticket = Ticket.build({ price, title, userId: req.currentUser!.id })
   await ticket.save()
 
-  res.status(201).send(ticket)
+  res.status(201).send({ data: ticket })
 }
