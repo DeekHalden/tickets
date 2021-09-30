@@ -1,10 +1,13 @@
+import { Request, Response } from 'express'
+
 import {
-  BadRequestError,
   NotAuthorizedError,
   NotFoundError,
 } from '@microservices-tessera/common'
-import { Request, Response } from 'express'
+
+import { TicketUpdatedPublisher } from '../events/publishers/ticket-update-publisher'
 import { Ticket } from '../models/ticket'
+import { natsWrapper } from '../nats-wrapper'
 
 export const updateTicket = async (req: Request, res: Response) => {
   const ticket = await Ticket.findById(req.params.id)
@@ -17,10 +20,18 @@ export const updateTicket = async (req: Request, res: Response) => {
     throw new NotAuthorizedError()
   }
 
+  const { title, price } = req.body
+
   ticket.set({
-    title: req.body.title,
-    price: req.body.price,
+    title,
+    price,
   })
   await ticket.save()
+  new TicketUpdatedPublisher(natsWrapper.client).publish({
+    id: ticket.id,
+    title,
+    price,
+    userId: req.currentUser!.id,
+  })
   res.send({ data: ticket })
 }

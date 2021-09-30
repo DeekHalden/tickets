@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+
 import { Ticket } from '../models/ticket'
 
 export const getTickets = async (req: Request, res: Response) => {

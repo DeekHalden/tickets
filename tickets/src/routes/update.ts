@@ -1,6 +1,8 @@
-import { requireAuth, validateRequest } from '@microservices-tessera/common'
 import { Router } from 'express'
 import { body } from 'express-validator'
+
+import { requireAuth, validateRequest } from '@microservices-tessera/common'
+
 import { prefix } from '../../consts'
 import { updateTicket } from '../controllers/update-ticket'
 

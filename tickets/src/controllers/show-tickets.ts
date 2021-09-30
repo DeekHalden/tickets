@@ -1,5 +1,7 @@
-import { NotFoundError } from '@microservices-tessera/common'
 import { Request, Response } from 'express'
+
+import { NotFoundError } from '@microservices-tessera/common'
+
 import { Ticket } from '../models/ticket'
 
 export const showTickets = async (req: Request, res: Response) => {
