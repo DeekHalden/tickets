@@ -2,17 +2,16 @@ import express from 'express'
 import 'express-async-errors'
 import cookieSession from 'cookie-session'
 
-
 import {
   currentUser,
   errorHandler,
   NotFoundError,
 } from '@microservices-tessera/common'
 
-import { createTicketRouter } from './routes/new'
-import { showTicketRouter } from './routes/show'
-import { indexRouter } from './routes'
-import { updateTicketRouter } from './routes/update'
+import { getAllOrdersRouter } from './routes'
+import { deleteOrdersRouter } from './routes/delete'
+import { showOrdersRouter } from './routes/show'
+import { newOrdersRouter } from './routes/new'
 
 const app = express()
 app.set('trust proxy', true)
@@ -26,10 +25,10 @@ app.use(
 )
 
 app.use(currentUser)
-app.use(createTicketRouter)
-app.use(showTicketRouter)
-app.use(indexRouter)
-app.use(updateTicketRouter)
+app.use(getAllOrdersRouter)
+app.use(deleteOrdersRouter)
+app.use(showOrdersRouter)
+app.use(newOrdersRouter)
 
 app.all('*', async () => {
   throw new NotFoundError()
