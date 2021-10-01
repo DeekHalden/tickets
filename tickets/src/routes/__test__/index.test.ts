@@ -18,5 +18,5 @@ it('can fetch a list of tickets', async () => {
     .get(`${prefix}/tickets`)
     .send()
     .expect(200)
-  expect(response.body.length).toEqual(3)
+  expect(response.body.data.length).toEqual(3)
 })

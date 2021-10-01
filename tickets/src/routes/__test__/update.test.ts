@@ -1,8 +1,11 @@
 import { Types } from 'mongoose'
 import request from 'supertest'
-import { prefix } from '../../../consts'
 
+import { prefix } from '../../../consts'
 import { app } from '../../app'
+
+import { natsWrapper as natsWrapperMock } from '../../nats-wrapper'
+
 
 it('returns a 404 if provided id does not exist', async () => {
   const id = new Types.ObjectId().toHexString()
@@ -27,7 +30,7 @@ it('returns a 401 if the user does not own the ticket', async () => {
     .expect(201)
 
   await request(app)
-    .put(`${prefix}/tickets/${ticketResponse.body.id}`)
+    .put(`${prefix}/tickets/${ticketResponse.body.data.id}`)
     .set('Cookie', signin({ email: 'qwe@qwe.ff', id: '12sdz' }))
     .send({ title: 'qwe', price: 24 })
     .expect(401)
@@ -40,14 +43,16 @@ it('returns a 400 if the user provides an invalid title or price', async () => {
     .send({ title: 'qwe', price: 24 })
     .expect(201)
 
+  expect(natsWrapperMock.client.publish).toHaveBeenCalledTimes(1)
+
   await request(app)
-    .put(`${prefix}/tickets/${ticketResponse.body.id}`)
+    .put(`${prefix}/tickets/${ticketResponse.body.data.id}`)
     .set('Cookie', cookie)
     .send({ title: '', price: 24 })
     .expect(400)
 
   await request(app)
-    .put(`${prefix}/tickets/${ticketResponse.body.id}`)
+    .put(`${prefix}/tickets/${ticketResponse.body.data.id}`)
     .set('Cookie', cookie)
     .send({ title: 'qweqw', price: -2 })
     .expect(400)
@@ -62,13 +67,16 @@ it('updates the ticket provided valid inputs', async () => {
     .send({ title: 'qwe', price: 24 })
     .expect(201)
   await request(app)
-    .put(`${prefix}/tickets/${createTicket.body.id}`)
+    .put(`${prefix}/tickets/${createTicket.body.data.id}`)
     .set('Cookie', cookie)
     .send({ title: 'new title', price: 20 })
     .expect(200)
 
 
-  const ticketResponse = await request(app).get(`${prefix}/tickets/${createTicket.body.id}`)
-  expect(ticketResponse.body.title).toEqual('new title')
-  expect(ticketResponse.body.price).toEqual(20)
+  const ticketResponse = await request(app).get(`${prefix}/tickets/${createTicket.body.data.id}`)
+  expect(ticketResponse.body.data.title).toEqual('new title')
+  expect(ticketResponse.body.data.price).toEqual(20)
+
+  expect(natsWrapperMock.client.publish).toHaveBeenCalled()
+  expect(natsWrapperMock.client.publish).toHaveBeenCalledTimes(2)
 })

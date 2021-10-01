@@ -1,10 +1,14 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
-import { app } from '../app'
-import request from 'supertest'
-import { prefix } from '../../consts'
 import { sign } from 'jsonwebtoken'
+import request from 'supertest'
+
+import { app } from '../app'
+import { prefix } from '../../consts'
+jest.mock('../nats-wrapper')
+
 let mongo: MongoMemoryServer
+
 
 declare global {
   var signin: (payload?: { id: string; email: string }) => string[]
@@ -22,6 +26,8 @@ beforeAll(async () => {
 })
 
 beforeEach(async () => {
+  jest.clearAllMocks()
+
   const collections = await mongoose.connection.db.collections()
   for (const collection of collections) {
     await collection.deleteMany({})
