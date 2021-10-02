@@ -4,11 +4,6 @@ import { Types } from 'mongoose'
 import { prefix } from '../../../consts'
 import { app } from '../../app'
 
-it('returns a 404 if the ticket is not found', async () => {
-  const id = new Types.ObjectId().toHexString()
-  await request(app).get(`${prefix}/tickets/${id}`).send().expect(404)
-})
-
 it('returns the ticket if it is found', async () => {
   const ticket = {
     title: 'concert',

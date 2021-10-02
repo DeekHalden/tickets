@@ -1,10 +1,12 @@
 import { Router } from 'express'
+
+import { requireAuth } from '@microservices-tessera/common'
+
 import { prefix } from '../../consts'
-import { getAllOrders } from '../controllers'
+import { deleteOrder } from '../controllers/delete'
 
 const router = Router()
 
-router.delete(`${prefix}/orders/:orderId`, getAllOrders)
+router.patch(`${prefix}/orders/:orderId`, requireAuth, deleteOrder)
 
-
-export { router as deleteOrdersRouter}
+export { router as deleteOrdersRouter }

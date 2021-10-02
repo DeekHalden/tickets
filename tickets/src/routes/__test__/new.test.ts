@@ -1,8 +1,10 @@
 import request from 'supertest'
 
-import { prefix } from '../../../consts'
 import { app } from '../../app'
+import { prefix } from '../../../consts'
+
 import { Ticket } from '../../models/ticket'
+
 import { natsWrapper as natsWrapperMock } from '../../nats-wrapper'
 
 it('has a route handler listening to /api/v1/tickets for post requests', async () => {

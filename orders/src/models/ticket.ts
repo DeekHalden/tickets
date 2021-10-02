@@ -1,3 +1,5 @@
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
+
 import { Document, model, Model, Schema } from 'mongoose'
 
 import { OrderStatus } from '@microservices-tessera/common'
@@ -5,6 +7,7 @@ import { OrderStatus } from '@microservices-tessera/common'
 import { Order } from './order'
 
 interface TicketAttrs {
+  id: string
   title: string
   price: number
 }
@@ -12,6 +15,7 @@ interface TicketAttrs {
 export interface TicketDoc extends Document {
   title: string
   price: number
+  version: number
   isReserved(): Promise<boolean>
 }
 
@@ -29,7 +33,7 @@ const ticketSchema = new Schema(
       type: Number,
       required: true,
       min: 0,
-    },
+    }
   },
   {
     toJSON: {
@@ -41,7 +45,16 @@ const ticketSchema = new Schema(
   }
 )
 
-ticketSchema.statics.build = (attrs: TicketAttrs) => new Ticket(attrs)
+ticketSchema.set('versionKey', 'version')
+ticketSchema.plugin(updateIfCurrentPlugin)
+
+ticketSchema.statics.build = (attrs: TicketAttrs) => {
+  const { id, ...restAttrs} = attrs
+  return new Ticket({
+    ...restAttrs,
+    _id: id,
+  })
+}
 
 ticketSchema.methods.isReserved = async function () {
   const existingOrder = await Order.findOne({

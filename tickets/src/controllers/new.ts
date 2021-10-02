@@ -14,6 +14,7 @@ export const handleNew = async (req: Request, res: Response) => {
     title,
     price,
     userId: req.currentUser!.id,
+    version: ticket.version,
   })
 
   res.status(201).send({ data: ticket })
