@@ -1,4 +1,5 @@
 import { Document, model, Model, Schema } from 'mongoose'
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current'
 
 import { OrderStatus } from '@microservices-tessera/common'
 
@@ -52,6 +53,9 @@ const orderSchema = new Schema(
     },
   }
 )
+
+orderSchema.set('versionKey', 'version')
+orderSchema.plugin(updateIfCurrentPlugin)
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs)

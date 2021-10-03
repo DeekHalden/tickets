@@ -13,6 +13,7 @@ import { Order } from '../../models/order'
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
+    id: new Types.ObjectId().toHexString(),
     title: 'concert',
     price: 20,
   })

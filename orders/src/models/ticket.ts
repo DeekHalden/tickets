@@ -21,6 +21,7 @@ export interface TicketDoc extends Document {
 
 interface TicketModel extends Model<TicketDoc> {
   build(attrs: TicketAttrs): TicketDoc
+  findByEvent(event: { id: string, version: number}): Promise<TicketDoc | null>
 }
 
 const ticketSchema = new Schema(
@@ -55,6 +56,11 @@ ticketSchema.statics.build = (attrs: TicketAttrs) => {
     _id: id,
   })
 }
+
+ticketSchema.statics.findByEvent = (event: { id: string, version: number}) => Ticket.findOne({
+  _id: event.id,
+  version: event.version - 1
+})
 
 ticketSchema.methods.isReserved = async function () {
   const existingOrder = await Order.findOne({
