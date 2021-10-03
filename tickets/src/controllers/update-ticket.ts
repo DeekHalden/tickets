@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import {
+  BadRequestError,
   NotAuthorizedError,
   NotFoundError,
 } from '@microservices-tessera/common'
@@ -14,6 +15,10 @@ export const updateTicket = async (req: Request, res: Response) => {
 
   if (!ticket) {
     throw new NotFoundError()
+  }
+
+  if (ticket.orderId) {
+    throw new BadRequestError('Cannot edit ad reserved ticket')
   }
 
   if (ticket.userId !== req.currentUser!.id) {

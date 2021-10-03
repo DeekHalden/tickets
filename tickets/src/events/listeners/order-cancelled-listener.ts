@@ -1,6 +1,6 @@
 import {
   Listener,
-  OrderCreatedEvent,
+  OrderCancelledEvent,
   OrderStatus,
   Subjects,
 } from '@microservices-tessera/common'
@@ -11,40 +11,30 @@ import { TicketUpdatedPublisher } from '../publishers/ticket-update-publisher'
 
 import { queueGroupName } from './queue-group-name'
 
-export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
-  readonly subject = Subjects.OrderCreated
+export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
+  readonly subject = Subjects.OrderCancelled
   queueGroupName = queueGroupName
+
   async onMessage(
-    data: {
-      id: string
-      status: OrderStatus
-      userId: string
-      expiresAt: string
-      version: number
-      ticket: { id: string; price: number }
-    },
+    data: { id: string; version: number; ticket: { id: string } },
     msg: Message
   ): Promise<void> {
-    const {
-      id: orderId,
-      ticket: { id: ticketId },
-    } = data
-
-    const ticket = await Ticket.findById(ticketId)
+    const ticket = await Ticket.findById(data.ticket.id)
 
     if (!ticket) {
       throw new Error('Ticket not found')
     }
 
-    ticket.set({ orderId })
+    ticket.set({ orderId: undefined })
+
     await ticket.save()
 
     await new TicketUpdatedPublisher(this.client).publish({
       id: ticket.id,
+      orderId: ticket.orderId,
+      userId: ticket.userId,
       price: ticket.price,
       title: ticket.title,
-      userId: ticket.userId,
-      orderId: ticket!.orderId,
       version: ticket.version,
     })
 

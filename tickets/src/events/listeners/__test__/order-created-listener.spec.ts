@@ -30,7 +30,6 @@ const setup = async () => {
     },
   }
 
-
   // @ts-ignore
   const msg: Message = {
     ack: jest.fn(),
@@ -40,7 +39,7 @@ const setup = async () => {
 }
 
 it('sets the userId of the ticket', async () => {
-  const { data, listener, msg, ticket} = await setup()
+  const { data, listener, msg, ticket } = await setup()
 
   await listener.onMessage(data, msg)
 
@@ -50,5 +49,21 @@ it('sets the userId of the ticket', async () => {
 })
 
 it('acks the message', async () => {
+  const { listener, data, msg } = await setup()
+  await listener.onMessage(data, msg)
 
+  expect(msg.ack).toHaveBeenCalled()
+})
+
+it('publishes a ticket updated event', async () => {
+  const { listener, data, msg } = await setup()
+  await listener.onMessage(data, msg)
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
+
+  // @ts-ignore
+  const ticketUpdatedData = JSON.parse((natsWrapper.client.publish as jest.Mock).mock.calls[0][1])
+
+  ticketUpdatedData //?
+
+  expect(data.id).toEqual(ticketUpdatedData.orderId)
 })
