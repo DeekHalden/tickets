@@ -19,14 +19,13 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     msg: Message
   ): Promise<void> {
     const delay = new Date(data.expiresAt).getTime() - new Date().getTime()
-    console.log(delay)
 
     await expirationQueue.add(
       {
         orderId: data.id,
       },
       {
-        delay,
+        delay/* : 10000 */
       }
     )
       
