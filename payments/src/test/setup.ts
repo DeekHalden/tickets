@@ -7,9 +7,9 @@ import { app } from '../app'
 import { prefix } from '../../consts'
 jest.mock('../nats-wrapper')
 
+process.env.STRIPE_KEY = 'sk_test_51JgobgDnT2AiHuvedghPM8r5JZOBNE2YaY24yzyAeL4D9Y5ZjiGLXZEwbYPnjNJlc4JFfithfbB5ZpHPOmhg8NN800KRkfHgJ6'
+
 let mongo: MongoMemoryServer
-
-
 declare global {
   var signin: (payload?: { id: string; email: string }) => string[]
   var signup: (

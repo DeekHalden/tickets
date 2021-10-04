@@ -8,6 +8,8 @@ import {
   NotFoundError,
 } from '@microservices-tessera/common'
 
+import { newPaymentRouter } from './routes/new'
+
 const app = express()
 app.set('trust proxy', true)
 app.use(express.json({ limit: '10kb' }))
@@ -20,6 +22,8 @@ app.use(
 )
 
 app.use(currentUser)
+
+app.use(newPaymentRouter)
 
 app.all('*', async () => {
   throw new NotFoundError()
