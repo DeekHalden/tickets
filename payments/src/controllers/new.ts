@@ -10,6 +10,8 @@ import {
 import { Order } from '../models/order'
 import { stripe } from '../stripe'
 import { Payment } from '../models/payment'
+import { PaymentCreatedPublisher } from '../events/publishers/payment-created-publisher'
+import { natsWrapper } from '../nats-wrapper'
 
 export const handleNewPayment = async (req: Request, res: Response) => {
   const { token, orderId } = req.body
@@ -33,10 +35,16 @@ export const handleNewPayment = async (req: Request, res: Response) => {
 
   const payment = Payment.build({
     stripeId: charge.id,
-    orderId
+    orderId,
   })
 
   await payment.save()
+
+  await new PaymentCreatedPublisher(natsWrapper.client).publish({
+    id: payment.id,
+    orderId: payment.orderId,
+    stripeId: payment.stripeId,
+  })
 
   res.status(201).send({ data: payment })
 }
