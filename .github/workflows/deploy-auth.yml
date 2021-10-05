@@ -1,6 +1,6 @@
 name: deploy-auth
 
-on: 
+on:
   push:
     branches:
       - master
@@ -19,7 +19,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push deekhalden/auth
       - run: |
-              curl -fsSL https://clis.cloud.ibm.com/install/linux | sh 
+              curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
               ibmcloud --version
       - run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD -g default
         env:
@@ -30,8 +30,3 @@ jobs:
       - run: ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
       - run: kubectl config current-context
       - run: kubectl rollout restart deployment auth-depl
-        
-              
-        
-        
-        
