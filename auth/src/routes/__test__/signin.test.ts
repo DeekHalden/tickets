@@ -15,7 +15,7 @@ it('fails when incorrect password is supplied', async () => {
 
 it('it responds with a cookie when valid creds given', async () => {
   await signup()
-  const cookie = signin(200, {
+  const cookie = await signin(200, {
     email: 'test@test.com',
     password: 'password',
   })
