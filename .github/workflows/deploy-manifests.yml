@@ -11,8 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      
-      
-      - run: sudo kubectl apply -f infra/k8s
-      - run: sudo kubectl apply -f infra/k8s-prod
+      - uses: actions/checkout@v2\
+      - uses: digitalocean/action-doctl@V2
+      - run: kubectl apply -f infra/k8s
+      - run: kubectl apply -f infra/k8s-prod
