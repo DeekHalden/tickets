@@ -21,7 +21,7 @@ jobs:
       - run: |
               curl -fsSL https://clis.cloud.ibm.com/install/linux | sh 
               ibmcloud --version
-      - run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD
+      - run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD && 6
         env:
           IBM_USERNAME: ${{ secrets.IBM_USERNAME }}
           IBM_PASSWORD: ${{ secrets.IBM_PASSWORD }}
