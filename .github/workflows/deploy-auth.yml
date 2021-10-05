@@ -18,4 +18,18 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push deekhalden/auth
+      - run: |
+              curl -fsSL https://clis.cloud.ibm.com/install/linux | sh 
+              ibmcloud --version
+      - run: |
+              ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD
+              ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
+              kubectl config current-context
+              kubectl rollout restart deployment auth-depl
+        env:
+          IBM_USERNAME: ${{ secrets.IBM_USERNAME }}
+          IBM_PASSWORD: ${{ secrets.IBM_PASSWORD }}
+              
+        
+        
         
