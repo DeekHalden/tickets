@@ -24,8 +24,9 @@ jobs:
       # Authenticate with IBM Cloud CLI
       - name: Authenticate with IBM Cloud CLI
         run: |
+          
+          ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD -r "eu-de" -g Default
           ibmcloud cr region-set "eu-de"
-          ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD -g Default
           ibmcloud cr login
         env:
           IBM_USERNAME: ${{ secrets.IBM_USERNAME }}
