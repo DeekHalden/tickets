@@ -12,5 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: |
+          sudo cp /etc/kubernetes/admin.conf $HOME/
+          sudo chown $(id -u):$(id -g) $HOME/admin.conf
+          export KUBECONFIG=$HOME/admin.conf
       - run: kubectl apply -f ./infra/k8s
       - run: kubectl apply -f ./infra/k8s-prod
