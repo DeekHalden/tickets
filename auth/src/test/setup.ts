@@ -52,7 +52,7 @@ global.signin = async (
   data = { email: 'test@test.com', password: 'password' }
 ) => {
   const response = await request(app)
-    .post(`${prefix}/users/signup`)
+    .post(`${prefix}/users/signin`)
     .send(data)
     .expect(status)
   const cookie = response.get('Set-Cookie')
