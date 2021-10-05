@@ -6,29 +6,43 @@ on:
       - master
     paths:
       - 'auth/**'
-      
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: cd auth && docker build -t deekhalden/auth .
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push deekhalden/auth
-      - run: |
-              curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
-              ibmcloud --version
-              
-      - run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD -g Default
+      # Download and Install IBM Cloud CLI
+      - name: Install IBM Cloud CLI
+        run: |
+            curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+            ibmcloud --version
+            ibmcloud config --check-version=false
+            ibmcloud plugin install -f kubernetes-service
+            ibmcloud plugin install -f container-registry
+            
+      # Authenticate with IBM Cloud CLI
+      - name: Authenticate with IBM Cloud CLI
+        run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD -g Default
         env:
           IBM_USERNAME: ${{ secrets.IBM_USERNAME }}
           IBM_PASSWORD: ${{ secrets.IBM_PASSWORD }}
-      - run: ibmcloud target -g default
       - run: ibmcloud cr region-set "eu-de"
       - run: ibmcloud cr login
-      - run: ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
-      - run: kubectl config current-context
-      - run: kubectl rollout restart deployment auth-depl
+      # Build the Docker image
+      - name: Build with Docker
+      # Push the image to IBM Container Registry
+      - name: Push the image to ICR
+        run: |
+          cd auth && docker build -t deekhalden/auth .
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker push deekhalden/auth
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      # Deploy the Docker image to the IKS cluster
+      - name: Deploy to IKS
+        run: |
+          ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
+          kubectl config current-context
+          kubectl rollout restart deployment auth-depl
