@@ -15,6 +15,5 @@ jobs:
       
       - name: Deploy to IKS
         run: |
-          ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
           kubectl apply -f infra/k8s
           kubectl apply -f infra/k8s-prod
