@@ -25,6 +25,7 @@ jobs:
         env:
           IBM_USERNAME: ${{ secrets.IBM_USERNAME }}
           IBM_PASSWORD: ${{ secrets.IBM_PASSWORD }}
+      - run: ibmcloud target -g default
       - run: ibmcloud cr region-set "eu-de"
       - run: ibmcloud cr login
       - run: ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
