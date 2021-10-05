@@ -17,5 +17,5 @@ it('responds with details about the current user', async () => {
   await request(app)
     .get(`${prefix}/users/currentuser`)
     .send()
-    .expect(401)
+    .expect(200)
 })

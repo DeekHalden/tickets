@@ -14,10 +14,6 @@ it('fails when incorrect password is supplied', async () => {
 })
 
 it('it responds with a cookie when valid creds given', async () => {
-  await signup()
-  const cookie = signin(200, {
-    email: 'dd@dd.fm',
-    password: '123456',
-  })
+  const cookie = await signup()
   expect(cookie).toBeDefined()
 })
