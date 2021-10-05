@@ -21,10 +21,11 @@ jobs:
       - run: |
               curl -fsSL https://clis.cloud.ibm.com/install/linux | sh 
               ibmcloud --version
-      - run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD && 6
+      - run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD
         env:
           IBM_USERNAME: ${{ secrets.IBM_USERNAME }}
           IBM_PASSWORD: ${{ secrets.IBM_PASSWORD }}
+      - run: ibmcloud target -o deekhalden
       - run: ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
       - run: kubectl config current-context
       - run: kubectl rollout restart deployment auth-depl
