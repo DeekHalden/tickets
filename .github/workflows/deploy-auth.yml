@@ -23,18 +23,21 @@ jobs:
             
       # Authenticate with IBM Cloud CLI
       - name: Authenticate with IBM Cloud CLI
-        run: ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD -g Default
+        run: |
+          ibmcloud login -u $IBM_USERNAME -p $IBM_PASSWORD -g Default
+          ibmcloud cr region-set "eu-de"
+          ibmcloud cr login
         env:
           IBM_USERNAME: ${{ secrets.IBM_USERNAME }}
           IBM_PASSWORD: ${{ secrets.IBM_PASSWORD }}
-      - run: ibmcloud cr region-set "eu-de"
-      - run: ibmcloud cr login
+      
       # Build the Docker image
       - name: Build with Docker
+        run: |
+          cd auth && docker build -t deekhalden/auth .
       # Push the image to IBM Container Registry
       - name: Push the image to ICR
         run: |
-          cd auth && docker build -t deekhalden/auth .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push deekhalden/auth
         env:
