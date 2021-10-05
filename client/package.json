@@ -29,6 +29,7 @@
     "jest": "^27.2.0",
     "kcd-scripts": "^11.2.2",
     "next": "^11.1.2",
+    "react-stripe-checkout": "^2.6.3",
     "swr": "^1.0.1",
     "whatwg-fetch": "^3.6.2"
   },

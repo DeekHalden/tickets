@@ -3,6 +3,8 @@ const Header = ({user}) => {
   const links = [
     !user && {label: 'Sign Up', href: '/auth/signup'},
     !user && {label: 'Sign In', href: '/auth/signin'},
+    user && { label: 'Sell tickets', href: '/tickets/new'},
+    user && { label: 'Show Orders', href: '/orders'},
     user && {label: 'Sign Out', href: '/auth/signout'},
   ]
     .filter(linkConfing => linkConfing)

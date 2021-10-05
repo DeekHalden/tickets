@@ -2,16 +2,25 @@ import React from 'react'
 import {useState} from 'react'
 import {client} from '../api/api'
 
-export const useRequest = ({endpoint, onSuccess, onError, config = {}} = {}) => {
+export const useRequest = ({
+  endpoint,
+  onSuccess,
+  onError,
+  config = {},
+} = {}) => {
   const [errors, setErrors] = useState(null)
 
-  const doRequest = async () => {
+  const doRequest = async (props = {}) => {
     try {
       setErrors(null)
-      const response = await client(endpoint, config)
+      const response = await client(
+        endpoint,
+        (config = {...config, data: {...config.data, ...props}}),
+      )
       onSuccess && onSuccess(response?.data)
       return response
     } catch (error) {
+      console.log(error)
       onError && onError(error.errors)
       setErrors(
         <div aria-label="error" className="alert alert-danger">

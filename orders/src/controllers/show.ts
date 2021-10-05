@@ -3,12 +3,10 @@ import { Request, Response } from 'express'
 import { Order } from '../models/order'
 
 export const show = async (req: Request, res: Response) => {
-  const order = await Order.findOne({
-    id: req.params.orderId,
-    userId: req.currentUser!.id,
-  }).populate('ticket')
+  console.log(req.params.orderId)
+  const order = await Order.findById(req.params.orderId).populate('ticket')
 
-  if (!order) {
+  if (!order || order.userId !== req.currentUser!.id) {
     throw new NotFoundError()
   }
   res.send({ data: order })
