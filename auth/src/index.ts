@@ -2,8 +2,7 @@ import mongoose from 'mongoose'
 import { app } from './app'
 
 const start = async () => {
-  console.log('App starting');
-  
+  console.log('App starting...');
   if (!process.env.JWT_KEY) {
     throw new Error('Please assign a JWT_KEY variable')
   }
