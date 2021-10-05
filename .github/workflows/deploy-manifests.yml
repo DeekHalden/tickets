@@ -1,0 +1,19 @@
+name: deploy-manifests
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'infra/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Deploy to IKS
+        run: |
+          ibmcloud ks cluster config -c c5e3kbcf0tqkg387jgdg
+          kubectl apply -f infra/k8s
