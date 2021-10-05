@@ -13,7 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Deploy to IKS
-        run: |
-          kubectl apply -f infra/k8s
-          kubectl apply -f infra/k8s-prod
+      
+      - run: kubectl apply -f infra/k8s
+      - run: kubectl apply -f infra/k8s-prod
