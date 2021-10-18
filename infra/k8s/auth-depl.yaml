@@ -16,6 +16,16 @@ spec:
         - name: auth
           image: deekhalden/auth
           env: 
+            - name: GOOGLE_AUTH_CLIENT
+              valueFrom:
+                secretKeyRef: 
+                  name: google-auth-client
+                  key: GOOGLE_AUTH_CLIENT
+            - name: GOOGLE_AUTH_SECRET
+              valueFrom:
+                secretKeyRef: 
+                  name: google-auth-secret
+                  key: GOOGLE_AUTH_SECRET
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef: 

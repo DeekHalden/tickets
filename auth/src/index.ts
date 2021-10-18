@@ -2,7 +2,12 @@ import mongoose from 'mongoose'
 import { app } from './app'
 
 const start = async () => {
-  console.log('starting!!!!!')
+  if (!process.env.GOOGLE_AUTH_CLIENT) {
+    throw new Error('Please assign a GOOGLE_AUTH_CLIENT variable')
+  }
+  if (!process.env.GOOGLE_AUTH_SECRET) {
+    throw new Error('Please assign a GOOGLE_AUTH_SECRET variable')
+  }
   if (!process.env.JWT_KEY) {
     throw new Error('Please assign a JWT_KEY variable')
   }
